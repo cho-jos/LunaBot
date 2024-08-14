@@ -3,7 +3,12 @@ import os
 from dotenv import load_dotenv
 
 load_dotenv()
-bot = discord.Bot()
+TOKEN = os.getenv('DISCORD_TOKEN')
+intents = discord.Intents.default()
+intents.messages = True
+intents.message_content = True
+bot = discord.Bot(intents=intents)
+bot.load_extension('cogs.reminders')
 
 @bot.event
 async def on_ready():
@@ -14,9 +19,4 @@ async def on_message(message):
     if message.content.lower() == 'hello!':
         await message.channel.send(f'Hello, {message.author.name}')
 
-# TODO: move slash commands to external files (cogs?)
-@bot.slash_command(name='meow')
-async def meow(ctx: discord.ApplicationContext):
-    await ctx.respond('meow!')
-
-bot.run(os.getenv('DISCORD_TOKEN'))
+bot.run(TOKEN)
