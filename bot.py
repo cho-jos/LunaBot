@@ -26,8 +26,11 @@ async def on_message(message):
         response = f'Hello, {message.author.name}'
         await message.channel.send(response)
 
-@tree.command(name='meow')
-async def meow(interaction: discord.Interaction):
-    await interaction.response.send_message("meow!")
+# TODO: extract slash commands to another file?
+# slash commands
+bot.load_extension()
+# @tree.command(name='meow')
+# async def meow(interaction: discord.Interaction):
+#     await interaction.response.send_message("meow!")
 
 bot.run(TOKEN)
