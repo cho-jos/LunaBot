@@ -26,23 +26,20 @@ class AqiCog(commands.Cog):
         elif aqi > 300:
             return ':rotating_light: HARZARDOUS!'
 
+    # TODO: then get the aqi for other places, also make this more programmatic
     @discord.command()
-    async def aqi(self, ctx):
-        r = requests.get(self.AQICN_BASE_URL + 'Boston/?token=' + self.AQICN_TOKEN)
+    async def aqi(self, ctx, arg):
+        r = requests.get(self.AQICN_BASE_URL + f"{arg}/?token=" + self.AQICN_TOKEN)
         if r.status_code == 200:
             r_json = r.json()
-            aqi = r_json['data']['aqi']
-            await ctx.respond(f'The aqi for Boston: {aqi} {self.add_aqi_emojis(aqi)}')
-            await ctx.respond(f'The aqi for Boston: 30 {self.add_aqi_emojis(30)}')
-            await ctx.respond(f'The aqi for Boston: 75 {self.add_aqi_emojis(75)}')
-            await ctx.respond(f'The aqi for Boston: 125 {self.add_aqi_emojis(125)}')
-            await ctx.respond(f'The aqi for Boston: 175 {self.add_aqi_emojis(175)}')
-            await ctx.respond(f'The aqi for Boston: 250 {self.add_aqi_emojis(250)}')
-            await ctx.respond(f'The aqi for Boston: 400 {self.add_aqi_emojis(400)}')
+            if r_json['status'] != 'ok':
+                await ctx.respond(f"Cannot retrieve AQI for \"{arg}\". \n Error: {r_json['data']}")
+            else:
+                aqi = r_json['data']['aqi']
+                await ctx.respond(f"The aqi for {arg}: {aqi} {self.add_aqi_emojis(aqi)}")
         else:
             print(f'Error calling AQICN API: {r.status_code}')
             await ctx.respond('Error calling AQICN API')
-        # TODO: then get the aqi for other places, also make this more programmatic
     
 def setup(bot):
     bot.add_cog(AqiCog(bot))
