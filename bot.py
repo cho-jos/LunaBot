@@ -9,7 +9,7 @@ intents.messages = True
 intents.message_content = True
 bot = discord.Bot(intents=intents)
 
-cogs = ['cogs.reminders', 'cogs.markets']
+cogs = ['cogs.reminders', 'cogs.markets', 'cogs.aqi']
 for cog in cogs:
     bot.load_extension(cog)
 
