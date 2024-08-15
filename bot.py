@@ -8,7 +8,10 @@ intents = discord.Intents.default()
 intents.messages = True
 intents.message_content = True
 bot = discord.Bot(intents=intents)
-bot.load_extension('cogs.reminders')
+
+cogs = ['cogs.reminders', 'cogs.markets']
+for cog in cogs:
+    bot.load_extension(cog)
 
 @bot.event
 async def on_ready():
